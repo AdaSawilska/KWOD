@@ -1,2 +1,0 @@
-# KWOD
-ML in mammography

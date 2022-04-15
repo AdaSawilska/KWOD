@@ -14,22 +14,20 @@ from sklearn.neighbors import KNeighborsClassifier
 from xgboost import XGBClassifier
 from tpot import TPOTClassifier
 
-with h5py.File('./input/all_mias_scans.h5', 'r') as scan_h5:
-    bg_info = scan_h5['BG'][:]
-    class_info = scan_h5['CLASS'][:]
-    #binarized labels - norm or pathology
-    data = pd.read_csv("labels.csv")
-    class_info = data["7"].values
-    # low res scans
-    scan_lr = scan_h5['scan'][:][:, ::16, ::16]
 
-scan_lr_flat = scan_lr.reshape((scan_lr.shape[0], -1))
+h5f = h5py.File('images.h5','r')
+img = h5f['images'][:][:, ::10, ::10]   #changing these parameters cause change of image size
+h5f.close()
+data = pd.read_csv("labels.csv")
+class_info = data["7"].values
+plt.imshow(img[8])
+plt.show()
+
+scan_lr_flat = img.reshape((img.shape[0], -1))
 
 class_le = LabelEncoder()
 class_le.fit(class_info)
 class_vec = class_le.transform(class_info)
-class_le.classes_
-
 
 idx_vec = np.arange(scan_lr_flat.shape[0])
 x_train, x_test, y_train, y_test, idx_train, idx_test = train_test_split(scan_lr_flat,
@@ -41,7 +39,7 @@ x_train, x_test, y_train, y_test, idx_train, idx_test = train_test_split(scan_lr
 print('Training', x_train.shape)
 print('Testing', x_test.shape)
 
-creport = lambda gt_vec, pred_vec: classification_report(gt_vec, pred_vec, target_names=['NORM', 'PATH'])
+creport = lambda gt_vec, pred_vec: classification_report(gt_vec, pred_vec, target_names=['NORM', 'PAT'])
                                                          # target_names=[x.decode() for x in
                                                          #               class_le.classes_])
 # Most Frequent Model

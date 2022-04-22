@@ -1,6 +1,6 @@
 %% WYRÓWNYWANIE HISTOGRAMU (Adaptacyjne wyrównywanie histogramu z ograniczeniem kontrastu)
-ImageFolder ='D:\Users\adkas\Documents\PycharmProjects\KWODproject\input\all-mias';
-OutputFolder = 'C:\Users\adkas\Desktop\output_histeq';
+ImageFolder ='.\all-mias';
+OutputFolder = '.\output_histeq';
 
 for i=10:99 % this loop will take 322 pictures and save them in the Matlab folder 
     img = ['\mdb0',num2str(i),'.pgm'];
@@ -12,8 +12,8 @@ for i=10:99 % this loop will take 322 pictures and save them in the Matlab folde
 end
 
 %% ROZCIĄGANIE HISTOGRAMU
-ImageFolder ='D:\Users\adkas\Documents\PycharmProjects\KWODproject\input\all-mias';
-OutputFolder = 'C:\Users\adkas\Desktop\output_stretch';
+ImageFolder ='.\all-mias';
+OutputFolder = '.\output_strech';
 for i=100:322 % this loop will take 322 pictures and save them in the Matlab folder 
     img = ['\mdb',num2str(i),'.pgm'];
     fullFileName = fullfile(ImageFolder, img);
@@ -28,8 +28,8 @@ end
 
 %% LAPLACJAN
 
-ImageFolder ='D:\Users\adkas\Documents\PycharmProjects\KWODproject\input\all-mias';
-OutputFolder = 'C:\Users\adkas\Desktop\output_laplacjan';
+ImageFolder ='.\all-mias';
+OutputFolder = '.\output_laplacjan';
 for i=100:322 % this loop will take 322 pictures and save them in the Matlab folder 
     img = ['\mdb',num2str(i),'.pgm'];
     fullFileName = fullfile(ImageFolder, img);
@@ -42,8 +42,8 @@ for i=100:322 % this loop will take 322 pictures and save them in the Matlab fol
 end
 
 %% KONTRAST LOKALNY
-ImageFolder ='D:\Users\adkas\Documents\PycharmProjects\KWODproject\input\all-mias';
-OutputFolder = 'C:\Users\adkas\Desktop\output_localcontrast';
+ImageFolder ='.\all-mias';
+OutputFolder = '.\output_contrast';
 for i=10:99 % this loop will take 322 pictures and save them in the Matlab folder 
     img = ['\mdb0',num2str(i),'.pgm'];
     fullFileName = fullfile(ImageFolder, img);
@@ -57,8 +57,8 @@ end
 
 %% REDUKXJA ZAMGLENIA
 
-ImageFolder ='D:\Users\adkas\Documents\PycharmProjects\KWODproject\input\all-mias';
-OutputFolder = 'C:\Users\adkas\Desktop\output_reduce';
+ImageFolder ='.\all-mias';
+OutputFolder = '.\output_fog';
 for i=1:9 % this loop will take 322 pictures and save them in the Matlab folder 
     img = ['\mdb00',num2str(i),'.pgm'];
     fullFileName = fullfile(ImageFolder, img);

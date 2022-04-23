@@ -14,8 +14,9 @@ from sklearn.neighbors import KNeighborsClassifier
 from xgboost import XGBClassifier
 from tpot import TPOTClassifier
 
+filename = 'images_reduce.h5'
 
-h5f = h5py.File('images.h5','r')
+h5f = h5py.File(filename,'r')
 img = h5f['images'][:][:, ::10, ::10]   #changing these parameters cause change of image size
 h5f.close()
 data = pd.read_csv("labels.csv")
@@ -47,6 +48,7 @@ dc = DummyClassifier(strategy='most_frequent')
 dc.fit(x_train, y_train)
 y_pred = dc.predict(x_test)
 print('Accuracy %2.2f%%' % (100 * accuracy_score(y_test, y_pred)))
+results = {"DummyClassifier": 100 * accuracy_score(y_test, y_pred)}
 print(creport(y_test, y_pred))
 
 # KNearestNeighbors
@@ -54,6 +56,7 @@ knn = KNeighborsClassifier(8)
 knn.fit(x_train, y_train)
 y_pred = knn.predict(x_test)
 print('Accuracy %2.2f%%' % (100 * accuracy_score(y_test, y_pred)))
+results["kNN"] = 100 * accuracy_score(y_test, y_pred)
 print(creport(y_test, y_pred))
 
 # Random Forest
@@ -61,6 +64,7 @@ rfc = RandomForestClassifier()
 rfc.fit(x_train, y_train)
 y_pred = rfc.predict(x_test)
 print('Accuracy %2.2f%%' % (100 * accuracy_score(y_test, y_pred)))
+results["RandomForest"] = 100 * accuracy_score(y_test, y_pred)
 print(creport(y_test, y_pred))
 
 # Gradient Boosting
@@ -68,15 +72,31 @@ xgc = XGBClassifier(silent=False, nthread=2)
 xgc.fit(x_train, y_train)
 y_pred = xgc.predict(x_test)
 print('Accuracy %2.2f%%' % (100 * accuracy_score(y_test, y_pred)))
+results["XGB"] = 100 * accuracy_score(y_test, y_pred)
 print(creport(y_test, y_pred))
 
 # AutoML
-
 
 tpc = TPOTClassifier(generations=2, population_size=5, verbosity=True)
 tpc.fit(x_train, y_train)
 y_pred = tpc.predict(x_test)
 print('Accuracy %2.2f%%' % (100 * accuracy_score(y_test, y_pred)))
+results["TPOT"] = 100 * accuracy_score(y_test, y_pred)
 print(creport(y_test, y_pred))
 
+# with open('results.csv', 'w', newline='') as csvfile:
+#     header_key = ['Accuracy equal histogram']
+#     new_val = csv.DictWriter(csvfile, fieldnames=header_key)
+#
+#     new_val.writeheader()
+#     for new_k in results:
+#         new_val.writerow({'Accuracy equal histogram': results[new_k]})
+s = filename.split("_")
+s = s[1].split(".")
+df = pd.read_csv('results.csv')
+df[f"Accuracy {s[0]}"] = [results["DummyClassifier"], results["kNN"], results["RandomForest"], results["XGB"], results["TPOT"] ]
+
+df.to_csv('results.csv', index=False)
+
 print("done")
+

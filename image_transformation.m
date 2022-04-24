@@ -2,26 +2,26 @@
 ImageFolder ='.\all-mias';
 OutputFolder = '.\output_histeq';
 
-for i=10:99 % this loop will take 322 pictures and save them in the Matlab folder 
-    img = ['\mdb0',num2str(i),'.pgm'];
+for i=1:322 % this loop will take 322 pictures and save them in the Matlab folder
+    img = [sprintf('\mdb%03d',i),'.pgm'];
     fullFileName = fullfile(ImageFolder, img);
     I = imread(fullFileName);
     J = adapthisteq(I);
-    imgName = [OutputFolder,'\mdb',num2str(i),'.png'] ;
+    imgName = [OutputFolder,sprintf('\mdb%03d',i),'.png'] ;
     imwrite(J,imgName) ; 
 end
 
 %% ROZCIĄGANIE HISTOGRAMU
 ImageFolder ='.\all-mias';
 OutputFolder = '.\output_strech';
-for i=100:322 % this loop will take 322 pictures and save them in the Matlab folder 
-    img = ['\mdb',num2str(i),'.pgm'];
+for i=1:322 % this loop will take 322 pictures and save them in the Matlab folder
+    img = [sprintf('\mdb%03d',i),'.pgm'];
     fullFileName = fullfile(ImageFolder, img);
     
     I = imread(fullFileName);
     J = imadjust(I,stretchlim(I,0.05),[]);
    
-    imgName = [OutputFolder,'\mdb',num2str(i),'.png'] ;
+    imgName = [OutputFolder,sprintf('\mdb%03d',i),'.png'] ;
     imwrite(J,imgName) ; 
 end
  
@@ -30,28 +30,28 @@ end
 
 ImageFolder ='.\all-mias';
 OutputFolder = '.\output_laplacjan';
-for i=100:322 % this loop will take 322 pictures and save them in the Matlab folder 
-    img = ['\mdb',num2str(i),'.pgm'];
+for i=1:322 % this loop will take 322 pictures and save them in the Matlab folder
+    img = [sprintf('\mdb%03d',i),'.pgm'];
     fullFileName = fullfile(ImageFolder, img);
     
     I = imread(fullFileName);
     J =  locallapfilt(I, 0.2, 0.1);
    
-    imgName = [OutputFolder,'\mdb',num2str(i),'.png'] ;
+    imgName = [OutputFolder,sprintf('\mdb%03d',i),'.png'] ;
     imwrite(J,imgName) ; 
 end
 
 %% KONTRAST LOKALNY
 ImageFolder ='.\all-mias';
 OutputFolder = '.\output_contrast';
-for i=10:99 % this loop will take 322 pictures and save them in the Matlab folder 
-    img = ['\mdb0',num2str(i),'.pgm'];
+for i=1:322 % this loop will take 322 pictures and save them in the Matlab folder
+    img = [sprintf('\mdb%03d',i),'.pgm'];
     fullFileName = fullfile(ImageFolder, img);
     
     I = imread(fullFileName);
     J = localcontrast(I, 0.4, 0.5);
    
-    imgName = [OutputFolder,'\mdb0',num2str(i),'.png'] ;
+    imgName = [OutputFolder,sprintf('\mdb%03d',i),'.png'] ;
     imwrite(J,imgName) ; 
 end
 
@@ -59,14 +59,14 @@ end
 
 ImageFolder ='.\all-mias';
 OutputFolder = '.\output_fog';
-for i=1:9 % this loop will take 322 pictures and save them in the Matlab folder 
-    img = ['\mdb00',num2str(i),'.pgm'];
+for i=1:322 % this loop will take 322 pictures and save them in the Matlab folder
+    img = [sprintf('\mdb%03d',i),'.pgm'];
     fullFileName = fullfile(ImageFolder, img);
     
     I = imread(fullFileName);
     J = imreducehaze(I);
    
-    imgName = [OutputFolder,'\mdb00',num2str(i),'.png'] ;
+    imgName = [OutputFolder,sprintf('\mdb%03d',i),'.png'] ;
     imwrite(J,imgName) ; 
 end
 
@@ -74,13 +74,13 @@ end
 
 ImageFolder ='C:\Users\aneta\Desktop\all-mias\all-mias';
 OutputFolder = 'C:\Users\aneta\Desktop\all-mias\output_oryginal';
-for i=100:322 % this loop will take 322 pictures and save them in the Matlab folder 
-    img = ['\mdb',num2str(i),'.pgm'];
+for i=1:322 % this loop will take 322 pictures and save them in the Matlab folder
+    img = [sprintf('\mdb%03d',i),'.pgm'];
     fullFileName = fullfile(ImageFolder, img);
     
     I = imread(fullFileName);
    
-    imgName = [OutputFolder,'\mdb',num2str(i),'.png'] ;
+    imgName = [OutputFolder,sprintf('\mdb%03d',i),'.png'] ;
     imwrite(I,imgName) ; 
 end
 

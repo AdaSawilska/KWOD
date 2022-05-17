@@ -1,0 +1,6 @@
+Classifier,Accuracy for original mammograms,hog_original,Accuracy hog_1,Accuracy hog_2,Accuracy hog_3,Accuracy hog_4,Accuracy hog_5,Accuracy hog_6,Accuracy hog_7,Accuracy hog_8
+DummyClassifier,55.907780979827095,55.91,55.91,55.91,55.91,55.91,55.91,55.91,55.91,55.91
+kNN,58.501440922190206,52.74,55.33,60.52,54.76,36.31,47.26,53.6,54.76,54.76
+RandomForest,62.2478386167147,56.20,56.2,68.01,57.06,55.33,56.48,56.2,55.91,56.2
+XGB,63.40057636887608,55.62,55.91,64.84,55.04,56.2,53.31,55.91,53.6,53.6
+TPOT,57.34870317002881,nic,nic,nic,nic,nic,nic,nic,nic,nic

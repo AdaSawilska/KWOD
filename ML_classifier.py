@@ -7,15 +7,16 @@ import csv
 import matplotlib.pyplot as plt
 from sklearn import svm
 from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
 from sklearn.dummy import DummyClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
 from xgboost import XGBClassifier
 from tpot import TPOTClassifier
 
-filenames = ['hog_2.h5']
+filenames = ['ROIbsif17_17_12.h5']
 for name in filenames:
 
     h5f = h5py.File(name, 'r')
@@ -46,18 +47,22 @@ for name in filenames:
                                                                              random_state=2017,
                                                                              test_size=0.5,
                                                                              stratify=class_vec)
+    # jeśli bsif
+    x_train = np.reshape(x_train, (len(x_train), -1))
+    x_test = np.reshape(x_test, (len(x_test), -1))
+
     print('Training', x_train.shape)
     print('Testing', x_test.shape)
 
     creport = lambda gt_vec, pred_vec: classification_report(gt_vec, pred_vec, target_names=["0", "1"])
 
     #Most Frequent Model
-    dc = DummyClassifier(strategy='most_frequent')
-    dc.fit(x_train, y_train)
-    y_pred = dc.predict(x_test)
-    print('Accuracy %2.2f%%' % (100 * accuracy_score(y_test, y_pred)))
-    results = {"DummyClassifier": round(100 * accuracy_score(y_test, y_pred),2)}
-    print(creport(y_test, y_pred))
+    # dc = DummyClassifier(strategy='most_frequent')
+    # dc.fit(x_train, y_train)
+    # y_pred = dc.predict(x_test)
+    # print('Accuracy %2.2f%%' % (100 * accuracy_score(y_test, y_pred)))
+    # results = {"DummyClassifier": round(100 * accuracy_score(y_test, y_pred),2)}
+    # print(creport(y_test, y_pred))
     #
     # # KNearestNeighbors
     # knn = KNeighborsClassifier(8)
@@ -83,12 +88,24 @@ for name in filenames:
     # results["XGB"] = round(100 * accuracy_score(y_test, y_pred),2)
     # print(creport(y_test, y_pred))
 
+
+    #SVM params
+    C_range = np.logspace(-2, 3, 6)
+    gamma_range = np.logspace(-3, 3, 7)
+    parameters = {'kernel': ('linear', 'rbf'), 'C': C_range, 'gamma': gamma_range}
+    svc = svm.SVC()
+    clf = GridSearchCV(svc, parameters)
+    clf.fit(x_train, y_train)
+    GridSearchCV(estimator=SVC(),
+                 param_grid={'C': C_range, 'gamma': gamma_range, 'kernel': ('linear', 'rbf')})
+    sorted(clf.cv_results_.keys())
+    print(clf.best_params_)
     # SVM
-    svm = svm.SVC(kernel='linear') #kernel='rbf'
+    svm = svm.SVC(kernel='rbf') #kernel='rbf'
     svm.fit(x_train, y_train)
     y_pred = svm.predict(x_test)
     print('Accuracy %2.2f%%' % (100 * accuracy_score(y_test, y_pred)))
-    results["SVM"] = round(100 * accuracy_score(y_test, y_pred), 2)
+    #results["SVM"] = round(100 * accuracy_score(y_test, y_pred), 2)
     print(creport(y_test, y_pred))
 
     # AutoML
@@ -100,20 +117,20 @@ for name in filenames:
     # print(creport(y_test, y_pred))
 
     # zapis wyników do pliku CSV
-    path_to_results = 'results_descriptors.csv'
-    if exists(path_to_results)==False:
-        with open(path_to_results, 'w', newline='') as csvfile:
-            header_key = ['Classifier', 'Accuracy for HOG']
-            new_val = csv.DictWriter(csvfile, fieldnames=header_key)
-            new_val.writeheader()
-            for new_k in results:
-                new_val.writerow({header_key[0]: new_k, header_key[1]: results[new_k]})
-    else:
-        s = name.split(".")
-        df = pd.read_csv(path_to_results)
-        # jeśli któregoś z klasyfikatorów nie używamy to trzeba wywalić i dać np. jakiś string albo 0
-        df[f"Accuracy {s[0]}"] = [results["DummyClassifier"], results["kNN"], results["RandomForest"], results["XGB"], "nic" ]
-        df.to_csv(path_to_results, index=False)
+    # path_to_results = 'results_descriptors.csv'
+    # if exists(path_to_results)==False:
+    #     with open(path_to_results, 'w', newline='') as csvfile:
+    #         header_key = ['Classifier', 'Accuracy for HOG']
+    #         new_val = csv.DictWriter(csvfile, fieldnames=header_key)
+    #         new_val.writeheader()
+    #         for new_k in results:
+    #             new_val.writerow({header_key[0]: new_k, header_key[1]: results[new_k]})
+    # else:
+    #     s = name.split(".")
+    #     df = pd.read_csv(path_to_results)
+    #     # jeśli któregoś z klasyfikatorów nie używamy to trzeba wywalić i dać np. jakiś string albo 0
+    #     df[f"Accuracy {s[0]}"] = [results["DummyClassifier"], results["kNN"], results["RandomForest"], results["XGB"], "nic" ]
+    #     df.to_csv(path_to_results, index=False)
 
 
     print("done")
